@@ -2,8 +2,11 @@
        BASICS
 --------------------*/
 
+@import url('http://fonts.googleapis.com/css?family=Open+Sans:400,700');
+
 body {
-    min-width: 320px;
+    padding:0;
+    margin:0;
   }
   
   /*-- Cursor --*/
@@ -68,6 +71,10 @@ body {
   
   .opacity-half {
     opacity: .5;
+  }
+
+  .text-center {
+    text-align: center;
   }
   .list-group-item > strong {
     padding-right: 5px;
