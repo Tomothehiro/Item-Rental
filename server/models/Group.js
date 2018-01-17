@@ -7,11 +7,10 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const roomSchema = new Schema({
+const groupSchema = new Schema({
   name: { type: String, required: true },
-  capacity: { type: Number, required: true },
-  groupId: { type: String, required: true },
-  description: String,
+  userId: { type: String, required: true },
+  admin: { type: Boolean, required: true },
 });
 
-module.exports = mongoose.model('Room', roomSchema);
+module.exports = mongoose.model('Group', groupSchema);

@@ -7,6 +7,8 @@
 const jwt = require('express-jwt');
 const jwks = require('jwks-rsa');
 
+const Group = require('./models/Group');
+const Item = require('./models/Item');
 const Event = require('./models/Event');
 const Rsvp = require('./models/Rsvp');
 const Room = require('./models/Room');
@@ -30,16 +32,6 @@ module.exports = function(app, config) {
     issuer: `https://${config.AUTH0_DOMAIN}/`,
     algorithm: 'RS256'
   });
-  
-  // Check for an authenticated admin user
-  const adminCheck = (req, res, next) => {
-    const roles = req.user[config.NAMESPACE] || [];
-    if (roles.indexOf('admin') > -1) {
-      next();
-    } else {
-      res.status(401).send({message: 'Not authorized for admin access'});
-    }
-  }
 
 /*
  |--------------------------------------
@@ -67,7 +59,7 @@ module.exports = function(app, config) {
   });
 
   // GET list of all events, public and private (admin only)
-  app.get('/api/events/admin', jwtCheck, adminCheck, (req, res) => {
+  app.get('/api/events/admin', jwtCheck, (req, res) => {
     Event.find({}, _eventListProjection, (err, events) => {
       let eventsArr = [];
       if (err) {
@@ -125,7 +117,7 @@ module.exports = function(app, config) {
     });
   
     // PUT (edit) an existing event
-    app.put('/api/event/:id', jwtCheck, adminCheck, (req, res) => {
+    app.put('/api/event/:id', jwtCheck, (req, res) => {
       Event.findById(req.params.id, (err, event) => {
         if (err) {
           return res.status(500).send({message: err.message});
@@ -150,7 +142,7 @@ module.exports = function(app, config) {
     });
   
     // DELETE an event and all associated RSVPs
-    app.delete('/api/event/:id', jwtCheck, adminCheck, (req, res) => {
+    app.delete('/api/event/:id', jwtCheck, (req, res) => {
       Event.findById(req.params.id, (err, event) => {
         if (err) {
           return res.status(500).send({message: err.message});
