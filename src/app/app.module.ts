@@ -15,6 +15,7 @@ import { CallbackComponent } from './pages/callback/callback.component';
 import { LoadingComponent } from './core/loading.component';
 import { ApiService } from './core/api.service';
 import { UtilsService } from './core/utils.service';
+import { AuthGuard } from './auth/auth.guard';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { UtilsService } from './core/utils.service';
     AuthService,
     ApiService,
     DatePipe,
-    UtilsService
+    UtilsService,
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })

@@ -24,7 +24,7 @@ interface Schedule_Model {
       eventColor?: string;
   }];
   events: EventModel[];
-};
+}
 
 export const ScheduleModel: Schedule_Model = {
   now: new Date().toISOString().slice(0,10),
@@ -34,9 +34,9 @@ export const ScheduleModel: Schedule_Model = {
   header: {
     left: 'today prev,next',
     center: 'title',
-    right: 'timelineDay,timelineThreeDays,agendaWeek,month,listWeek'
+    right: 'timelineThreeDays,agendaWeek,month,listWeek'
   },
-  defaultView: 'timelineDay',
+  defaultView: 'month',
   views: {
     timelineThreeDays: {
       type: 'timeline',
