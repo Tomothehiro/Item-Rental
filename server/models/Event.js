@@ -12,9 +12,11 @@ const eventSchema = new Schema({
   userId: { type: String, required: true },
   groupId: { type: String, required: true },
   location: { type: String, required: true },
-  startDatetime: { type: Date, required: true },
-  endDatetime: { type: Date, required: true },
+  start: { type: Date, required: true },
+  end: { type: Date, required: true },
   viewPublic: { type: Boolean, required: true },
+  allDay: { type: Boolean, required: true },
+  id: String, // repeating events will have same id
   description: String,
 });
 

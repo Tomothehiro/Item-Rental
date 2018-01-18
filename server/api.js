@@ -39,28 +39,12 @@ module.exports = function(app, config) {
  |--------------------------------------
  */
 
-  const _eventListProjection = 'title startDatetime endDatetime viewPublic';
+  const _eventListProjection = 'title start end viewPublic';
 
   // GET list of public events starting in the future
   // Projections state which fields we want returned in the documents (we don't need description or locations here)
-  app.get('/api/events', (req, res) => {
-    Event.find({viewPublic: true, startDatetime: { $gte: new Date() }}, _eventListProjection, (err, events) => {
-      let eventsArr = [];
-      if (err) {
-        return res.status(500).send({message: err.message});
-      }
-      if (events) {
-        events.forEach(event => {
-          eventsArr.push(event);
-        });
-      }
-      res.send(eventsArr);
-    });
-  });
-
-  // GET list of all events, public and private (admin only)
-  app.get('/api/events/admin', jwtCheck, (req, res) => {
-    Event.find({}, _eventListProjection, (err, events) => {
+  app.get('/api/events', jwtCheck, (req, res) => {
+    Event.find({userId: req.user.sub}, _eventListProjection, (err, events) => {
       let eventsArr = [];
       if (err) {
         return res.status(500).send({message: err.message});
@@ -92,7 +76,7 @@ module.exports = function(app, config) {
       Event.findOne({
         title: req.body.title,
         location: req.body.location,
-        startDatetime: req.body.startDatetime}, (err, existingEvent) => {
+        start: req.body.start}, (err, existingEvent) => {
         if (err) {
           return res.status(500).send({message: err.message});
         }
@@ -102,8 +86,8 @@ module.exports = function(app, config) {
         const event = new Event({
           title: req.body.title,
           location: req.body.location,
-          startDatetime: req.body.startDatetime,
-          endDatetime: req.body.endDatetime,
+          start: req.body.start,
+          end: req.body.end,
           description: req.body.description,
           viewPublic: req.body.viewPublic
         });
@@ -127,8 +111,8 @@ module.exports = function(app, config) {
         }
         event.title = req.body.title;
         event.location = req.body.location;
-        event.startDatetime = req.body.startDatetime;
-        event.endDatetime = req.body.endDatetime;
+        event.start = req.body.start;
+        event.end = req.body.end;
         event.viewPublic = req.body.viewPublic;
         event.description = req.body.description;
   
@@ -238,7 +222,7 @@ module.exports = function(app, config) {
   app.get('/api/events/:userId', jwtCheck, (req, res) => {
     Rsvp.find({userId: req.params.userId}, 'eventId', (err, rsvps) => {
       const _eventIdsArr = rsvps.map(rsvp => rsvp.eventId);
-      const _rsvpEventsProjection = 'title startDatetime endDatetime';
+      const _rsvpEventsProjection = 'title start end';
       let eventsArr = [];
 
       if (err) {
@@ -246,7 +230,7 @@ module.exports = function(app, config) {
       }
       if (rsvps) {
         Event.find(
-          {_id: {$in: _eventIdsArr}, startDatetime: { $gte: new Date() }},
+          {_id: {$in: _eventIdsArr}, start: { $gte: new Date() }},
           _rsvpEventsProjection, (err, events) => {
           if (err) {
             return res.status(500).send({message: err.message});

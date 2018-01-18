@@ -7,6 +7,8 @@ import { ENV } from './env.config';
 import { EventModel } from './models/event.model';
 import { RsvpModel } from './models/rsvp.model';
 import { RoomModel } from './models/room.model';
+import { GroupModel } from './models/group.model';
+import { ItemModel } from './models/item.model';
 
 @Injectable()
 export class ApiService {
@@ -22,14 +24,7 @@ export class ApiService {
   // GET list of public, future events
   getEvents$(): Observable<EventModel[]> {
     return this.http
-      .get(`${ENV.BASE_API}events`)
-      .catch(this._handleError);
-  }
-
-  // GET all events - private and public (admin only)
-  getAdminEvents$(): Observable<EventModel[]> {
-    return this.http
-      .get(`${ENV.BASE_API}events/admin`, {
+      .get(`${ENV.BASE_API}events`, {
         headers: new HttpHeaders().set('Authorization', this._authHeader)
       })
       .catch(this._handleError);

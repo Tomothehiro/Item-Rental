@@ -1,5 +1,8 @@
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -10,6 +13,8 @@ import { HomeComponent } from './pages/home/home.component';
 import { AuthService } from './auth/auth.service';
 import { CallbackComponent } from './pages/callback/callback.component';
 import { LoadingComponent } from './core/loading.component';
+import { ApiService } from './core/api.service';
+import { UtilsService } from './core/utils.service';
 
 
 @NgModule({
@@ -23,11 +28,16 @@ import { LoadingComponent } from './core/loading.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule
   ],
   providers: [
     Title,
-    AuthService
+    AuthService,
+    ApiService,
+    DatePipe,
+    UtilsService
   ],
   bootstrap: [AppComponent]
 })
